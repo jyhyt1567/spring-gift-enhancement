@@ -31,9 +31,9 @@ public class WishServiceImpl implements WishService {
         checkDuplicateWish(requestDto.productId(), memberId);
         ProductResponseDto productResponseDto = productService.findProductById(
                 requestDto.productId());
-        Wish newWish = new Wish(null, requestDto.productId(), memberId, requestDto.quantity());
-        Wish savedWish = wishRepository.createWish(newWish);
-        return new WishResponseDto(productResponseDto, savedWish.getQuantity());
+        //Wish newWish = new Wish(null, requestDto.productId(), memberId, requestDto.quantity());
+        //Wish savedWish = wishRepository.createWish(newWish);
+        return null;//new WishResponseDto(productResponseDto, savedWish.getQuantity());
     }
 
     @Override
@@ -66,9 +66,9 @@ public class WishServiceImpl implements WishService {
                 quantity,
                 productId,
                 memberId);
-        Long updatedProductId = updatedWish.getProductId();
-        ProductResponseDto productResponseDto = productService.findProductById(updatedProductId);
-        return new WishResponseDto(productResponseDto, updatedWish.getQuantity());
+        //Long updatedProductId = updatedWish.getProductId();
+        //ProductResponseDto productResponseDto = productService.findProductById(updatedProductId);
+        return null;//new WishResponseDto(productResponseDto, updatedWish.getQuantity());
     }
 
     @Override
