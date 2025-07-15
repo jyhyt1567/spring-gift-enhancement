@@ -1,5 +1,6 @@
 package gift.repository;
 
+import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wish;
 import gift.misc.Pair;
@@ -8,16 +9,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface WishRepository {
+public interface WishRepository extends JpaRepository<Wish, Long> {
 
-    Wish createWish(Wish newWish);
+    List<Wish> findAllByMember_Id(Long memberId);
 
-    List<Pair<Wish, Product>> findMemberWishes(Long memberId);
+    Optional<Wish> findByProduct_IdAndMember_Id(Long productId, Long memberId);
 
-    Optional<Wish> findMemberWishByProductId(Long productId, Long memberId);
-
-    Wish updateMemberWishQuantityByProductId(Long quantity, Long productId, Long memberId);
-
-    void deleteMemberWishByProductId(Long productId, Long memberId);
+    void deleteByProduct_IdAndMember_Id(Long productId, Long memberId);
 }

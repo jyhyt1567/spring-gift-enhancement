@@ -1,6 +1,7 @@
 package gift.entity;
 
 import gift.dto.CreateProductRequestDto;
+import gift.dto.ProductResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,5 +60,9 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public ProductResponseDto toDto(){
+        return new ProductResponseDto(this.id, this.name, this.getPrice(), this.getImageUrl());
     }
 }

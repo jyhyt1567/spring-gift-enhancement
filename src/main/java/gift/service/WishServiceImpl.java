@@ -3,46 +3,64 @@ package gift.service;
 import gift.dto.CreateWishRequestDto;
 import gift.dto.ProductResponseDto;
 import gift.dto.WishResponseDto;
+import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wish;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.misc.Pair;
+import gift.repository.MemberRepository;
+import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WishServiceImpl implements WishService {
 
     private final WishRepository wishRepository;
 
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    public WishServiceImpl(WishRepository wishRepository, ProductService productService) {
+    private final MemberRepository memberRepository;
+
+    public WishServiceImpl(WishRepository wishRepository,
+            ProductRepository productRepository,
+            MemberRepository memberRepository) {
         this.wishRepository = wishRepository;
-        this.productService = productService;
+        this.productRepository = productRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
     public WishResponseDto createWish(CreateWishRequestDto requestDto, Long memberId) {
         checkDuplicateWish(requestDto.productId(), memberId);
-        ProductResponseDto productResponseDto = productService.findProductById(
-                requestDto.productId());
-        //Wish newWish = new Wish(null, requestDto.productId(), memberId, requestDto.quantity());
-        //Wish savedWish = wishRepository.createWish(newWish);
-        return null;//new WishResponseDto(productResponseDto, savedWish.getQuantity());
+
+        Product product = productRepository.findById(requestDto.productId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NotRegisterd));
+
+        Wish newWish = new Wish(product, member, requestDto.quantity());
+        ProductResponseDto productResponseDto = productRepository
+                .findById(requestDto.productId())
+                .get()
+                .toDto();
+
+        wishRepository.save(newWish);
+        return new WishResponseDto(productResponseDto, requestDto.quantity());
     }
 
     @Override
     public List<WishResponseDto> findMemberWishes(Long memberId) {
-        List<Pair<Wish, Product>> pairs = wishRepository.findMemberWishes(memberId);
+        List<Wish> wishes = wishRepository.findAllByMember_Id(memberId);
         List<WishResponseDto> wishesList = new ArrayList<>();
-        for (Pair<Wish, Product> pair: pairs) {
-            Wish wish = pair.first();
-            Product product = pair.second();
+        for (Wish wish: wishes) {
+            Product product = wish.getProduct();
             ProductResponseDto productResponseDto = new ProductResponseDto(
                     product.getId(),
                     product.getName(),
@@ -61,31 +79,30 @@ public class WishServiceImpl implements WishService {
             Long quantity,
             Long productId,
             Long memberId) {
-        findMemberWishByProductIdOrElseThrow(productId, memberId);
-        Wish updatedWish = wishRepository.updateMemberWishQuantityByProductId(
-                quantity,
-                productId,
-                memberId);
-        //Long updatedProductId = updatedWish.getProductId();
-        //ProductResponseDto productResponseDto = productService.findProductById(updatedProductId);
-        return null;//new WishResponseDto(productResponseDto, updatedWish.getQuantity());
+        Wish find = findMemberWishByProductIdOrElseThrow(productId, memberId);
+        Wish updated = new Wish(find.getId(), find.getProduct(), find.getMember(), quantity);
+        wishRepository.save(updated);
+        Long updatedProductId = updated.getProduct().getId();
+        ProductResponseDto productResponseDto = productRepository.findById(updatedProductId).get().toDto();
+        return new WishResponseDto(productResponseDto, updated.getQuantity());
     }
 
     @Override
+    @Transactional
     public void deleteMemberWishByProductId(Long productId, Long memberId) {
         findMemberWishByProductIdOrElseThrow(productId, memberId);
-        wishRepository.deleteMemberWishByProductId(productId, memberId);
+        wishRepository.deleteByProduct_IdAndMember_Id(productId, memberId);
     }
 
     private void checkDuplicateWish(Long productId, Long memberId) {
-        wishRepository.findMemberWishByProductId(productId, memberId)
+        wishRepository.findByProduct_IdAndMember_Id(productId, memberId)
                 .ifPresent(wish -> {
                     throw new CustomException(ErrorCode.AlreadyMadeWish);
                 });
     }
 
     private Wish findMemberWishByProductIdOrElseThrow(Long productId, Long memberId) {
-        return wishRepository.findMemberWishByProductId(productId, memberId)
+        return wishRepository.findByProduct_IdAndMember_Id(productId, memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.WishNotfound));
     }
 }
