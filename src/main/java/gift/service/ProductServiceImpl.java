@@ -22,10 +22,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto createProduct(CreateProductRequestDto requestDto) {
 
-        Product newProduct = new Product(null, requestDto.name(), requestDto.price(),
+        Product newProduct = new Product(requestDto.name(), requestDto.price(),
                 requestDto.imageUrl());
 
-        Product savedProduct = productRepository.createProduct(newProduct);
+        Product savedProduct = productRepository.save(newProduct);
 
         return new ProductResponseDto(savedProduct.getId(), savedProduct.getName(),
                 savedProduct.getPrice(), savedProduct.getImageUrl());
@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponseDto> findAllProducts() {
 
-        List<Product> products = productRepository.findAllProducts();
+        List<Product> products = productRepository.findAll();
         List<ProductResponseDto> productsList = new ArrayList<>();
         for (Product product : products) {
             ProductResponseDto responseDto = new ProductResponseDto(product.getId(),
@@ -48,18 +48,16 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto findProductById(Long id) {
         Product find = findProductByIdOrElseThrow(id);
 
-        ProductResponseDto responseDto = new ProductResponseDto(find.getId(), find.getName(),
+        return new ProductResponseDto(find.getId(), find.getName(),
                 find.getPrice(), find.getImageUrl());
-        return responseDto;
     }
 
     @Override
     public ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto) {
-        Product find = findProductByIdOrElseThrow(id);
+        findProductByIdOrElseThrow(id);
         Product newProduct = new Product(id, requestDto.name(), requestDto.price(),
                 requestDto.imageUrl());
-
-        productRepository.updateProductById(id, newProduct);
+        productRepository.save(newProduct);
         Product updated = findProductByIdOrElseThrow(id);
         return new ProductResponseDto(updated.getId(), updated.getName(), updated.getPrice(),
                 updated.getImageUrl());
@@ -68,11 +66,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductById(Long id) {
         findProductByIdOrElseThrow(id);
-        productRepository.deleteProductById(id);
+        productRepository.deleteById(id);
     }
 
     private Product findProductByIdOrElseThrow(Long id) {
-        return productRepository.findProductById(id)
+        return productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
     }
 }

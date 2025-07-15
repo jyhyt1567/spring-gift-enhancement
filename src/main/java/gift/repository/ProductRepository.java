@@ -1,20 +1,15 @@
 package gift.repository;
 
-import gift.dto.CreateProductRequestDto;
-import gift.dto.ProductResponseDto;
 import gift.entity.Product;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Product createProduct(Product newProduct);
+    List<Product> findAll();
 
-    List<Product> findAllProducts();
+    Optional<Product> findById(Long id);
 
-    Optional<Product> findProductById(Long id);
-
-    void deleteProductById(Long id);
-
-    Product updateProductById(Long id, Product newProduct);
+    void deleteById(Long id);
 }
