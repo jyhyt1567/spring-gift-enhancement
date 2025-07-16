@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.entity.Product;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,6 +17,7 @@ class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
+    @DisplayName("상품 아이디로 삭제 테스트")
     void deleteById() {
         Product expected = new Product("아이스아메리카노", 1500L, "asd.dsa");
         Product actual = productRepository.save(expected);
@@ -27,6 +29,7 @@ class ProductRepositoryTest {
     }
 
     @Test
+    @DisplayName("상품을 아이디로 조회 테스트")
     void findById() {
         Product expected = new Product("아이스아메리카노", 1500L, "asd.dsa");
         productRepository.save(expected);
@@ -41,6 +44,7 @@ class ProductRepositoryTest {
     }
 
     @Test
+    @DisplayName("상품 등록 테스트")
     void save() {
         Product expected = new Product("아이스아메리카노", 1500L, "asd.dsa");
         productRepository.save(expected);

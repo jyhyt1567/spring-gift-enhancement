@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import gift.entity.Member;
 import gift.entity.Product;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,6 +18,7 @@ class MemberRepositoryTest {
     private MemberRepository memberRepository;
 
     @Test
+    @DisplayName("멤버 아이디로 삭제 테스트")
     void deleteById() {
         Member expected = new Member("asd@asd.asd", "dasdada", "user");
         Member actual = memberRepository.save(expected);
@@ -28,6 +30,7 @@ class MemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("멤버 이메일로 조회 테스트")
     void findByEmail() {
         Member expected = new Member("asd@asd.asd", "dasdada", "user");
         memberRepository.save(expected);
@@ -42,6 +45,7 @@ class MemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("멤버 저장 테스트")
     void save() {
         Member expected = new Member("asd@asd.asd", "dasdada", "user");
         memberRepository.save(expected);

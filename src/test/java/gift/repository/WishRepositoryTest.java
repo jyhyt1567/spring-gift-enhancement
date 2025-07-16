@@ -7,6 +7,7 @@ import gift.entity.Member;
 import gift.entity.Product;
 import gift.entity.Wish;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -26,6 +27,7 @@ public class WishRepositoryTest {
 
 
     @Test
+    @DisplayName("위시 저장 테스트")
     void save() {
         Product product = new Product(1L, "아이스아메리카노", 1500L, "asd.dsa");
         Member member = new Member(1L, "asd@asd.asd", "dasdada", "user");
@@ -42,6 +44,7 @@ public class WishRepositoryTest {
     }
 
     @Test
+    @DisplayName("상품 아이디에 해당하는 위시 조회 테스트")
     void findByProduct_IdAndMember_Id() {
         Product product = new Product("아이스아메리카노", 1500L, "asd.dsa");
         Member member = new Member("asd@asd.asd", "dasdada", "user");
@@ -64,6 +67,7 @@ public class WishRepositoryTest {
     }
 
     @Test
+    @DisplayName("상품 아이디에 해당하는 위시 삭제 테스트")
     void deleteByProduct_IdAndMember_Id() {
         Product product = new Product("아이스아메리카노", 1500L, "asd.dsa");
         Member member = new Member("asd@asd.asd", "dasdada", "user");
