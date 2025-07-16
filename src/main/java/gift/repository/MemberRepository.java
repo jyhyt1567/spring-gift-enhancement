@@ -4,13 +4,12 @@ import gift.entity.Member;
 import gift.entity.Product;
 import java.util.Optional;
 
-public interface MemberRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    Member createMember(Member newMember);
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Optional<Member> findMemberByEmail(String email);
+    Optional<Member> findByEmail(String email);
 
-    void updateMemberPassword(Member member, String newPassword);
+    void deleteById(Long id);
 
-    void deleteMember(Member member);
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +39,7 @@ public class ProductControllerTest {
     private MemberService memberService;
 
     @Test
+    @DisplayName("상품 전체 조회 테스트")
     void 전체_조회하면_200이_반환된다() {
         String url = "http://localhost:" + port + "/api/products";
         ResponseEntity<List<ProductResponseDto>> response = client.get()
@@ -49,6 +51,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("상품 개별 조회 테스트")
     void 존재하는_아이디로_개별조회하면_200이_반환된다() {
         String url = "http://localhost:" + port + "/api/products/1";
         ResponseEntity<ProductResponseDto> response = client.get()
@@ -59,6 +62,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("없는 상품 개별 조회 실패 테스트")
     void 존재하지_않는_아이디로_개별조회하면_404가_반환된다() {
         String url = "http://localhost:" + port + "/api/products/999";
         assertThatExceptionOfType(HttpClientErrorException.NotFound.class)
@@ -71,6 +75,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("상품 등록 성공 테스트")
     void 상품등록에_성공하면_201가_반환된다() {
         String url = "http://localhost:" + port + "/api/products";
         CreateProductRequestDto requestDto = new CreateProductRequestDto("asd", 123L, "aasdfgh");
@@ -84,6 +89,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("입력 값 검증으로 인한 상품 등록 실패 테스트")
     void 상품등록에_실패하면_400가_반환된다() {
         String url = "http://localhost:" + port + "/api/products";
         CreateProductRequestDto requestDto = new CreateProductRequestDto(
@@ -100,6 +106,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("입력 값 검증으로 인한 상품 수정 실패 테스트")
     void 상품수정에_실패하면_400가_반환된다() {
         String url = "http://localhost:" + port + "/api/products/1";
         CreateProductRequestDto requestDto = new CreateProductRequestDto(
@@ -116,6 +123,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("없는 상품 수정 실패 테스트")
     void 없는_상품을_수정하면_404가_반환된다() {
         String url = "http://localhost:" + port + "/api/products/999";
         CreateProductRequestDto requestDto = new CreateProductRequestDto("asd", 123L, "aasdfgh");
@@ -131,6 +139,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("상품 수정 성공 테스트")
     void 상품을_정상적으로_수정하면_200가_반환된다() {
         String url = "http://localhost:" + port + "/api/products/3";
         CreateProductRequestDto requestDto = new CreateProductRequestDto("asd", 123L, "aasdfgh");
@@ -144,6 +153,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("상품 삭제 성공 테스트")
     void 상품을_정상적으로_삭제하면_204가_반환된다() {
         String url = "http://localhost:" + port + "/api/products/3";
         ResponseEntity<ProductResponseDto> response = client.delete()
@@ -155,6 +165,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("없는 상품 삭제 실패 테스트")
     void 상품을_삭제_실패하면_404가_반환된다() {
         String url = "http://localhost:" + port + "/api/products/999";
 
@@ -175,18 +186,12 @@ public class ProductControllerTest {
         } catch (Exception e) {
 
         }
-        try {
-            memberService.deleteMember(
-                    new DeleteMemberRequestDto("test@asd.asd", "asd"));
-        } catch (Exception e) {
-
-        }
-
     }
 
     @BeforeEach
     void CreateToken() {
-        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("test@asd.asd", "asd");
-        token = memberService.createMember(requestDto).token();
+        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser1@asdasd.asd",
+                "asd");
+        token = memberService.loginMember(requestDto).token();
     }
 }

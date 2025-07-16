@@ -25,8 +25,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public JWTResponseDto createMember(CreateMemberRequestDto requestDto) {
         throwIfMemberFindByEmail(requestDto.email());
-        Member newMember = new Member(null, requestDto.email(), requestDto.password(), "user");
-        Member savedMember = memberRepository.createMember(newMember);
+        Member newMember = new Member(requestDto.email(), requestDto.password(), "user");
+        Member savedMember = memberRepository.save(newMember);
         String accessToken = tokenService.createAccessToken(savedMember);
         return new JWTResponseDto(accessToken);
     }
@@ -46,8 +46,8 @@ public class MemberServiceImpl implements MemberService {
         Member find = findMemberByEmailOrElseThrow(requestDto.email());
 
         throwIfPasswordIncorrect(find, requestDto.oldPassword());
-
-        memberRepository.updateMemberPassword(find, requestDto.newPassword());
+        Member updated = new Member(find.getId(), find.getEmail(), requestDto.newPassword(), find.getRole());
+        memberRepository.save(updated);
     }
 
     @Override
@@ -56,16 +56,16 @@ public class MemberServiceImpl implements MemberService {
 
         throwIfPasswordIncorrect(find, requestDto.password());
 
-        memberRepository.deleteMember(find);
+        memberRepository.deleteById(find.getId());
     }
 
     private Member findMemberByEmailOrElseThrow(String email) {
-        return memberRepository.findMemberByEmail(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.NotRegisterd));
     }
 
     private void throwIfMemberFindByEmail(String email) {
-        memberRepository.findMemberByEmail(email)
+        memberRepository.findByEmail(email)
                 .ifPresent(member -> {
                     throw new CustomException(ErrorCode.AlreadyRegistered);
                 });

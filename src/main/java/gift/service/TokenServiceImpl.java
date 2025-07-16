@@ -27,7 +27,7 @@ public class TokenServiceImpl implements TokenService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        Optional<Member> find = memberRepository.findMemberByEmail(
+        Optional<Member> find = memberRepository.findByEmail(
                 claims.get("email", String.class));
 
         if(find.isEmpty()){

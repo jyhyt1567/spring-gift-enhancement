@@ -10,6 +10,7 @@ import gift.exception.CustomErrorResponse;
 import gift.exception.CustomException;
 import gift.service.MemberService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +35,7 @@ public class MemberControllerTest {
     private MemberService memberService;
 
     @Test
+    @DisplayName("회원 가입 성공 테스트")
     void 회원가입하면_201이_반환된다() {
         String url = "http://localhost:" + port + "/api/members/register";
         CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser2@asdasd.asd",
@@ -48,20 +50,12 @@ public class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("로그인 성공 테스트")
     void 로그인하면_200이_반환된다() {
 
-        String url = "http://localhost:" + port + "/api/members/register";
-        CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser2@asdasd.asd",
+        String url = "http://localhost:" + port + "/api/members/login";
+        CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser1@asdasd.asd",
                 "asd");
-        client.post()
-                .uri(url)
-                .body(memberRequestDto)
-                .retrieve()
-                .toEntity(new ParameterizedTypeReference<JWTResponseDto>() {
-                });
-
-        url = "http://localhost:" + port + "/api/members/login";
-        memberRequestDto = new CreateMemberRequestDto("testUser2@asdasd.asd", "asd");
         ResponseEntity<JWTResponseDto> response = client.post()
                 .uri(url)
                 .body(memberRequestDto)
@@ -72,9 +66,10 @@ public class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("가입하지 않은 이메일 로그인 실패 테스트")
     void 회원가입하지_않은_사용자는_404가_반환된다() {
         String url = "http://localhost:" + port + "/api/members/login";
-        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser2@asdasd.asd",
+        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser10@asdasd.asd",
                 "asd");
         assertThatExceptionOfType(HttpClientErrorException.NotFound.class)
                 .isThrownBy(() ->
