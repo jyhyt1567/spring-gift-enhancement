@@ -7,3 +7,10 @@
   - repository 인터페이스를 JpaRepository를 상속하도록 변경
   - service 레이어의 코드 변경한 Jpa 코드와 호환되도록 변경
   - 테스트 코드 작성
+
+# step 1 피드백 반영
+- 주석 제거
+- 주생성자 활용 (생성자 체이닝을 통한 코드 중복 최소화)
+- 엔티티 요구사항 충족 (not null, unique)
+- 도메인 클래스에서 dto 변환 로직 제거
+- display name을 통해 어떤 테스트인지 표현
