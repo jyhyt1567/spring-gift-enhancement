@@ -46,10 +46,12 @@ public class WishServiceImpl implements WishService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NotRegisterd));
 
         Wish newWish = new Wish(product, member, requestDto.quantity());
-        ProductResponseDto productResponseDto = productRepository
-                .findById(requestDto.productId())
-                .get()
-                .toDto();
+
+        ProductResponseDto productResponseDto = new ProductResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl());
 
         wishRepository.save(newWish);
         return new WishResponseDto(productResponseDto, requestDto.quantity());
@@ -83,7 +85,12 @@ public class WishServiceImpl implements WishService {
         Wish updated = new Wish(find.getId(), find.getProduct(), find.getMember(), quantity);
         wishRepository.save(updated);
         Long updatedProductId = updated.getProduct().getId();
-        ProductResponseDto productResponseDto = productRepository.findById(updatedProductId).get().toDto();
+        Product product = productRepository.findById(updatedProductId).get();
+        ProductResponseDto productResponseDto = new ProductResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl());
         return new WishResponseDto(productResponseDto, updated.getQuantity());
     }
 
