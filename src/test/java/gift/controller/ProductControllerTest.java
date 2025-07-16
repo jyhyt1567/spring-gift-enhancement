@@ -175,18 +175,11 @@ public class ProductControllerTest {
         } catch (Exception e) {
 
         }
-        try {
-            memberService.deleteMember(
-                    new DeleteMemberRequestDto("test@asd.asd", "asd"));
-        } catch (Exception e) {
-
-        }
-
     }
 
     @BeforeEach
     void CreateToken() {
-        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("test@asd.asd", "asd");
-        token = memberService.createMember(requestDto).token();
+        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser1@asdasd.asd", "asd");
+        token = memberService.loginMember(requestDto).token();
     }
 }

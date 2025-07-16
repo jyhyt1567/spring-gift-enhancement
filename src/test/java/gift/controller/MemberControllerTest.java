@@ -50,18 +50,8 @@ public class MemberControllerTest {
     @Test
     void 로그인하면_200이_반환된다() {
 
-        String url = "http://localhost:" + port + "/api/members/register";
-        CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser2@asdasd.asd",
-                "asd");
-        client.post()
-                .uri(url)
-                .body(memberRequestDto)
-                .retrieve()
-                .toEntity(new ParameterizedTypeReference<JWTResponseDto>() {
-                });
-
-        url = "http://localhost:" + port + "/api/members/login";
-        memberRequestDto = new CreateMemberRequestDto("testUser2@asdasd.asd", "asd");
+        String url = "http://localhost:" + port + "/api/members/login";
+        CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser1@asdasd.asd", "asd");
         ResponseEntity<JWTResponseDto> response = client.post()
                 .uri(url)
                 .body(memberRequestDto)
@@ -74,7 +64,7 @@ public class MemberControllerTest {
     @Test
     void 회원가입하지_않은_사용자는_404가_반환된다() {
         String url = "http://localhost:" + port + "/api/members/login";
-        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser2@asdasd.asd",
+        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser10@asdasd.asd",
                 "asd");
         assertThatExceptionOfType(HttpClientErrorException.NotFound.class)
                 .isThrownBy(() ->

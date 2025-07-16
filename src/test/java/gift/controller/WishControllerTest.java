@@ -49,7 +49,7 @@ public class WishControllerTest {
     @Test
     void 위시등록에_성공하면_201가_반환된다() {
         String url = "http://localhost:" + port + "/api/wishes";
-        CreateWishRequestDto requestDto = new CreateWishRequestDto(1L, 3L);
+        CreateWishRequestDto requestDto = new CreateWishRequestDto(3L, 3L);
         ResponseEntity<WishResponseDto> response = client.post()
                 .uri(url)
                 .header("Authorization", token)
@@ -73,7 +73,7 @@ public class WishControllerTest {
 
     @Test
     void 없는_위시의_수량변경하면_404가_반환된다() {
-        String url = "http://localhost:" + port + "/api/wishes/1";
+        String url = "http://localhost:" + port + "/api/wishes/2";
         UpdateWishQuantityRequstDto requestDto = new UpdateWishQuantityRequstDto(10L);
         assertThatExceptionOfType(HttpClientErrorException.NotFound.class)
                 .isThrownBy(() ->
@@ -104,16 +104,8 @@ public class WishControllerTest {
 
     @Test
     void 등록한_위시의_수량변경에_성공하면_200가_반환된다() {
-        String url = "http://localhost:" + port + "/api/wishes";
-        CreateWishRequestDto requestDto = new CreateWishRequestDto(1L, 3L);
-        client.post()
-                .uri(url)
-                .header("Authorization", token)
-                .body(requestDto)
-                .retrieve()
-                .toEntity(WishResponseDto.class);
 
-        url = "http://localhost:" + port + "/api/wishes/1";
+        String url = "http://localhost:" + port + "/api/wishes/1";
 
         UpdateWishQuantityRequstDto updateRequestDto = new UpdateWishQuantityRequstDto(10L);
         ResponseEntity<WishResponseDto> response = client.patch()
@@ -143,7 +135,7 @@ public class WishControllerTest {
         assertThatExceptionOfType(HttpClientErrorException.NotFound.class)
                 .isThrownBy(() ->
                         client.delete()
-                                .uri(url + "/1")
+                                .uri(url + "/999")
                                 .header("Authorization", token)
                                 .retrieve()
                                 .toBodilessEntity()
@@ -154,14 +146,6 @@ public class WishControllerTest {
     void 등록한_위시의_삭제에_성공하면_204가_반환된다() {
         String url = "http://localhost:" + port + "/api/wishes";
 
-        CreateWishRequestDto requestDto = new CreateWishRequestDto(1L, 3L);
-        client.post()
-                .uri(url)
-                .header("Authorization", token)
-                .body(requestDto)
-                .retrieve()
-                .toEntity(WishResponseDto.class);
-
         ResponseEntity<Void> response = client.delete()
                 .uri(url + "/1")
                 .header("Authorization", token)
@@ -170,19 +154,9 @@ public class WishControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
-
-    @AfterEach
-    void deleteTestUser() {
-        try {
-            memberService.deleteMember(
-                    new DeleteMemberRequestDto("test@asd.asd", "asd"));
-        } catch (Exception e) {
-        }
-    }
-
     @BeforeEach
     void CreateToken() {
-        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("test@asd.asd", "asd");
-        token = memberService.createMember(requestDto).token();
+        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser1@asdasd.asd", "asd");
+        token = memberService.loginMember(requestDto).token();
     }
 }
