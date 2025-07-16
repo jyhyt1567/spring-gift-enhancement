@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 public class WishRepositoryTest {
+
     @Autowired
     private WishRepository wishRepository;
 
@@ -25,7 +26,6 @@ public class WishRepositoryTest {
 
 
     @Test
-
     void save() {
         Product product = new Product("아이스아메리카노", 1500L, "asd.dsa");
         Member member = new Member("asd@asd.asd", "dasdada", "user");
@@ -52,7 +52,8 @@ public class WishRepositoryTest {
         Wish expected = new Wish(product, member, 4L);
         wishRepository.save(expected);
 
-        Wish actual = wishRepository.findByProduct_IdAndMember_Id(product.getId(), member.getId()).get();
+        Wish actual = wishRepository.findByProduct_IdAndMember_Id(product.getId(), member.getId())
+                .get();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getProduct()).isEqualTo(expected.getProduct()),
@@ -76,7 +77,8 @@ public class WishRepositoryTest {
 
         wishRepository.deleteByProduct_IdAndMember_Id(1L, 1L);
 
-        Optional<Wish> actual = wishRepository.findByProduct_IdAndMember_Id(product.getId(), member.getId());
+        Optional<Wish> actual = wishRepository.findByProduct_IdAndMember_Id(product.getId(),
+                member.getId());
         assertAll(
                 () -> assertThat(actual.isEmpty())
         );

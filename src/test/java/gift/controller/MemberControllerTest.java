@@ -51,7 +51,8 @@ public class MemberControllerTest {
     void 로그인하면_200이_반환된다() {
 
         String url = "http://localhost:" + port + "/api/members/login";
-        CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser1@asdasd.asd", "asd");
+        CreateMemberRequestDto memberRequestDto = new CreateMemberRequestDto("testUser1@asdasd.asd",
+                "asd");
         ResponseEntity<JWTResponseDto> response = client.post()
                 .uri(url)
                 .body(memberRequestDto)

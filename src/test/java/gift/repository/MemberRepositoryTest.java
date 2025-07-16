@@ -12,9 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 class MemberRepositoryTest {
+
     @Autowired
     private MemberRepository memberRepository;
-    
+
     @Test
     void deleteById() {
         Member expected = new Member("asd@asd.asd", "dasdada", "user");

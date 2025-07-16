@@ -62,7 +62,7 @@ public class Product {
         return imageUrl;
     }
 
-    public ProductResponseDto toDto(){
+    public ProductResponseDto toDto() {
         return new ProductResponseDto(this.id, this.name, this.getPrice(), this.getImageUrl());
     }
 }

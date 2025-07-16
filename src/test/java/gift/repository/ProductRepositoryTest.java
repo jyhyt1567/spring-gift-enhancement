@@ -11,9 +11,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 class ProductRepositoryTest {
+
     @Autowired
     private ProductRepository productRepository;
-    
+
     @Test
     void deleteById() {
         Product expected = new Product("아이스아메리카노", 1500L, "asd.dsa");

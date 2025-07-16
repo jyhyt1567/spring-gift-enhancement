@@ -156,7 +156,8 @@ public class WishControllerTest {
 
     @BeforeEach
     void CreateToken() {
-        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser1@asdasd.asd", "asd");
+        CreateMemberRequestDto requestDto = new CreateMemberRequestDto("testUser1@asdasd.asd",
+                "asd");
         token = memberService.loginMember(requestDto).token();
     }
 }
