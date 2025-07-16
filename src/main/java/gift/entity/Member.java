@@ -33,9 +33,7 @@ public class Member {
     }
 
     public Member(String email, String password, String role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
+        this(null, email, password, role);
     }
 
     public Member() {

@@ -41,9 +41,7 @@ public class Wish {
     }
 
     public Wish(Product product, Member member, Long quantity) {
-        this.product = product;
-        this.member = member;
-        this.quantity = quantity;
+        this(null, product, member, quantity);
     }
 
     public Long getId() {
