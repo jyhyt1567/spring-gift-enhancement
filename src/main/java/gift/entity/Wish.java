@@ -29,7 +29,7 @@ public class Wish {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
-    public Wish() {
+    protected Wish() {
 
     }
 

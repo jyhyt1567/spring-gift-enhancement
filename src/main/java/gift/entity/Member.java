@@ -36,7 +36,7 @@ public class Member {
         this(null, email, password, role);
     }
 
-    public Member() {
+    protected Member() {
 
     }
 

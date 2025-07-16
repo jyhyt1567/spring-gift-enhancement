@@ -40,7 +40,7 @@ public class Product {
         this(null, name, price, imageUrl);
     }
 
-    public Product() {
+    protected Product() {
 
     }
 
