@@ -25,9 +25,6 @@ public class Member {
     @Column(name = "role")
     private String role;
 
-//    @OneToMany(mappedBy = "wish")
-//    private List<Wish> wishes = new ArrayList<>();
-
     public Member(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
