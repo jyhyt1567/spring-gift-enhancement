@@ -33,15 +33,15 @@ public class Product {
 
     }
 
+    public Product(String name, Long price, String imageUrl) {
+        this(null, name, price, imageUrl);
+    }
+
     public Product(Long id, String name, Long price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
-    }
-
-    public Product(String name, Long price, String imageUrl) {
-        this(null, name, price, imageUrl);
     }
 
     public Long getId() {

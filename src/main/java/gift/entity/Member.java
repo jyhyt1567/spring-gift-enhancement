@@ -29,15 +29,15 @@ public class Member {
 
     }
 
+    public Member(String email, String password, String role) {
+        this(null, email, password, role);
+    }
+
     public Member(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    public Member(String email, String password, String role) {
-        this(null, email, password, role);
     }
 
     public Long getId() {
