@@ -8,6 +8,9 @@ import gift.exception.ErrorCode;
 import gift.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,16 +35,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> findAllProducts() {
-
-        List<Product> products = productRepository.findAll();
-        List<ProductResponseDto> productsList = new ArrayList<>();
-        for (Product product : products) {
-            ProductResponseDto responseDto = new ProductResponseDto(product.getId(),
-                    product.getName(), product.getPrice(), product.getImageUrl());
-            productsList.add(responseDto);
-        }
-        return productsList;
+    public Page<ProductResponseDto> findAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return toResponseDtoPage(products);
     }
 
     @Override
@@ -72,5 +68,13 @@ public class ProductServiceImpl implements ProductService {
     private Product findProductByIdOrElseThrow(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
+    }
+
+    private Page<ProductResponseDto> toResponseDtoPage(Page<Product> page){
+        return page.map(product -> new ProductResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl()));
     }
 }

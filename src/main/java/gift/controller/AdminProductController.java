@@ -14,6 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -44,8 +48,8 @@ public class AdminProductController {
     }
 
     @GetMapping
-    public String showAdminPage(Model model) {
-        List<ProductResponseDto> products = productService.findAllProducts();
+    public String showAdminPage(Model model, @PageableDefault(size = 5, sort = "name", direction = Direction.ASC) Pageable pageable) {
+        List<ProductResponseDto> products = productService.findAllProducts(pageable).getContent();
         model.addAttribute("products", products);
         return "dashboard";
     }
