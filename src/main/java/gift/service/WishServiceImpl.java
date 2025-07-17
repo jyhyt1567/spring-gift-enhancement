@@ -12,9 +12,12 @@ import gift.misc.Pair;
 import gift.repository.MemberRepository;
 import gift.repository.ProductRepository;
 import gift.repository.WishRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,22 +61,9 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
-    public List<WishResponseDto> findMemberWishes(Long memberId) {
-        List<Wish> wishes = wishRepository.findAllByMember_Id(memberId);
-        List<WishResponseDto> wishesList = new ArrayList<>();
-        for (Wish wish: wishes) {
-            Product product = wish.getProduct();
-            ProductResponseDto productResponseDto = new ProductResponseDto(
-                    product.getId(),
-                    product.getName(),
-                    product.getPrice(),
-                    product.getImageUrl()
-            );
-            WishResponseDto responseDto = new WishResponseDto(productResponseDto,
-                    wish.getQuantity());
-            wishesList.add(responseDto);
-        }
-        return wishesList;
+    public Page<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable) {
+        Page<Wish> wishes = wishRepository.findAll(pageable);
+        return toResponseDtoPage(wishes);
     }
 
     @Override
@@ -111,5 +101,16 @@ public class WishServiceImpl implements WishService {
     private Wish findMemberWishByProductIdOrElseThrow(Long productId, Long memberId) {
         return wishRepository.findByProduct_IdAndMember_Id(productId, memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.WishNotfound));
+    }
+
+    private Page<WishResponseDto> toResponseDtoPage(Page<Wish> page){
+        return page.map(wish -> {
+            Product product = wish.getProduct();
+            ProductResponseDto responseDto = new ProductResponseDto(product.getId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getImageUrl());
+            return new WishResponseDto(responseDto, wish.getQuantity());
+        });
     }
 }
