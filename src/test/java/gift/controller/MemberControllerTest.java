@@ -11,7 +11,10 @@ import gift.exception.CustomException;
 import gift.service.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -24,6 +27,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MemberControllerTest {
 
     @LocalServerPort
@@ -34,6 +38,7 @@ public class MemberControllerTest {
     @Autowired
     private MemberService memberService;
 
+    @Order(1)
     @Test
     @DisplayName("회원 가입 성공 테스트")
     void 회원가입하면_201이_반환된다() {
@@ -49,6 +54,7 @@ public class MemberControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
+    @Order(2)
     @Test
     @DisplayName("로그인 성공 테스트")
     void 로그인하면_200이_반환된다() {
@@ -65,6 +71,7 @@ public class MemberControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @Order(3)
     @Test
     @DisplayName("가입하지 않은 이메일 로그인 실패 테스트")
     void 회원가입하지_않은_사용자는_404가_반환된다() {
