@@ -25,6 +25,10 @@ public class Member {
     @Column(name = "role", nullable = false)
     private String role;
 
+    protected Member() {
+
+    }
+
     public Member(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
@@ -34,10 +38,6 @@ public class Member {
 
     public Member(String email, String password, String role) {
         this(null, email, password, role);
-    }
-
-    protected Member() {
-
     }
 
     public Long getId() {
