@@ -103,7 +103,7 @@ public class WishServiceImpl implements WishService {
                 .orElseThrow(() -> new CustomException(ErrorCode.WishNotfound));
     }
 
-    private Page<WishResponseDto> toResponseDtoPage(Page<Wish> page){
+    private Page<WishResponseDto> toResponseDtoPage(Page<Wish> page) {
         return page.map(wish -> {
             Product product = wish.getProduct();
             ProductResponseDto responseDto = new ProductResponseDto(product.getId(),

@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
     }
 
-    private Page<ProductResponseDto> toResponseDtoPage(Page<Product> page){
+    private Page<ProductResponseDto> toResponseDtoPage(Page<Product> page) {
         return page.map(product -> new ProductResponseDto(
                 product.getId(),
                 product.getName(),
