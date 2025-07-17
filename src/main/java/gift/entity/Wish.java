@@ -63,4 +63,8 @@ public class Wish {
     public Long getQuantity() {
         return quantity;
     }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
 }

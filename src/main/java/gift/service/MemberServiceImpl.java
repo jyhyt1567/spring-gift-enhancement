@@ -9,6 +9,7 @@ import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -42,12 +43,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updateMemberPassword(UpdateMemberPasswordRequestDto requestDto) {
         Member find = findMemberByEmailOrElseThrow(requestDto.email());
-
         throwIfPasswordIncorrect(find, requestDto.oldPassword());
-        Member updated = new Member(find.getId(), find.getEmail(), requestDto.newPassword(), find.getRole());
-        memberRepository.save(updated);
+        find.setPassword(requestDto.newPassword());
     }
 
     @Override

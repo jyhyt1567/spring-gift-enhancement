@@ -67,15 +67,15 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
+    @Transactional
     public WishResponseDto updateMemberWishQuantityByProductId(
             Long quantity,
             Long productId,
             Long memberId) {
         Wish find = findMemberWishByProductIdOrElseThrow(productId, memberId);
-        Wish updated = new Wish(find.getId(), find.getProduct(), find.getMember(), quantity);
-        wishRepository.save(updated);
-        Long updatedProductId = updated.getProduct().getId();
-        Product product = productRepository.findById(updatedProductId).get();
+        find.setQuantity(quantity);
+        Wish updated = findMemberWishByProductIdOrElseThrow(productId, memberId);
+        Product product = updated.getProduct();
         ProductResponseDto productResponseDto = new ProductResponseDto(
                 product.getId(),
                 product.getName(),

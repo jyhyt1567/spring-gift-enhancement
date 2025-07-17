@@ -56,6 +56,10 @@ public class Member {
         return role;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Boolean isAdmin() {
         return this.role.equals("admin");
     }

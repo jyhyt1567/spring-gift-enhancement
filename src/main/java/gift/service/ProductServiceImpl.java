@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -49,11 +50,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto) {
-        findProductByIdOrElseThrow(id);
-        Product newProduct = new Product(id, requestDto.name(), requestDto.price(),
-                requestDto.imageUrl());
-        productRepository.save(newProduct);
+        Product find = findProductByIdOrElseThrow(id);
+        find.setName(requestDto.name());
+        find.setPrice(requestDto.price());
+        find.setImageUrl(requestDto.imageUrl());
         Product updated = findProductByIdOrElseThrow(id);
         return new ProductResponseDto(updated.getId(), updated.getName(), updated.getPrice(),
                 updated.getImageUrl());
