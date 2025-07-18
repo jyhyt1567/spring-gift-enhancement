@@ -43,10 +43,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDto findProductById(Long id) {
-        Product find = findProductByIdOrElseThrow(id);
+        Product product = findProductByIdOrElseThrow(id);
 
-        return new ProductResponseDto(find.getId(), find.getName(),
-                find.getPrice(), find.getImageUrl());
+        return new ProductResponseDto(product.getId(), product.getName(),
+                product.getPrice(), product.getImageUrl());
     }
 
     @Override
