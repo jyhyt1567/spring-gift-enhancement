@@ -38,10 +38,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductPageDto findAllProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         Page<ProductResponseDto> responseDtos = toResponseDtoPage(products);
-        List<ProductResponseDto> contents = responseDtos.getContent();
-        int pageNum = responseDtos.getNumber();
-        int totalPageNum = responseDtos.getTotalPages();
-        return new ProductPageDto(contents, pageNum, totalPageNum);
+        return new ProductPageDto(responseDtos);
     }
 
     @Override

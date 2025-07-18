@@ -65,10 +65,7 @@ public class WishServiceImpl implements WishService {
     public WishPageDto findMemberWishes(Long memberId, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findAllByMember_Id(memberId, pageable);
         Page<WishResponseDto> responseDtos = toResponseDtoPage(wishes);
-        List<WishResponseDto> contents = responseDtos.getContent();
-        int pageNum = responseDtos.getNumber();
-        int totalPageNum = responseDtos.getTotalPages();
-        return new WishPageDto(contents, pageNum, totalPageNum);
+        return new WishPageDto(responseDtos);
     }
 
     @Override
