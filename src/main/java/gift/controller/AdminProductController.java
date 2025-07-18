@@ -49,10 +49,7 @@ public class AdminProductController {
 
     @GetMapping
     public String showAdminPage(Model model, @PageableDefault(size = 5, sort = "name", direction = Direction.ASC) Pageable pageable) {
-        Page<ProductResponseDto> productPage = productService.findAllProducts(pageable);
-        List<ProductResponseDto> products = productPage.getContent();
-        model.addAttribute("pageNum", productPage.getNumber());
-        model.addAttribute("totalPageNum", productPage.getTotalPages());
+        Page<ProductResponseDto> products = productService.findAllProducts(pageable);
         model.addAttribute("products", products);
         return "dashboard";
     }

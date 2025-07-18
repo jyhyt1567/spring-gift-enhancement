@@ -37,16 +37,17 @@ public class WishController {
     public ResponseEntity<WishResponseDto> createWish(
             @RequestBody CreateWishRequestDto requestDto,
             @LoginMember Member member) {
-        return new ResponseEntity<>(wishService.createWish(requestDto, member.getId()),
+        Long memberId = member.getId();
+        return new ResponseEntity<>(wishService.createWish(requestDto, memberId),
                 HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<WishResponseDto>> findMemberWishes(
+    public ResponseEntity<Page<WishResponseDto>> findMemberWishes(
             @LoginMember Member member,
             @PageableDefault(size = 5, direction = Direction.ASC) Pageable pageable) {
-        Page<WishResponseDto> wishPage = wishService.findMemberWishes(member.getId(), pageable);
-        List<WishResponseDto> wishes = wishPage.getContent();
+        Long memberId = member.getId();
+        Page<WishResponseDto> wishes = wishService.findMemberWishes(memberId, pageable);
         return new ResponseEntity<>(wishes, HttpStatus.OK);
     }
 
@@ -55,15 +56,15 @@ public class WishController {
             @Valid @RequestBody UpdateWishQuantityRequstDto requestDto,
             @PathVariable Long productId,
             @LoginMember Member member) {
-
+        Long memberId = member.getId();
         if (requestDto.quantity().equals(0L)) {
-            wishService.deleteMemberWishByProductId(productId, member.getId());
+            wishService.deleteMemberWishByProductId(productId, memberId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(
                 wishService.updateMemberWishQuantityByProductId(requestDto.quantity(), productId,
-                        member.getId()),
+                        memberId),
                 HttpStatus.OK);
     }
 
@@ -71,7 +72,8 @@ public class WishController {
     public ResponseEntity<Void> deleteMemberWishByProductId(
             @PathVariable Long productId,
             @LoginMember Member member) {
-        wishService.deleteMemberWishByProductId(productId, member.getId());
+        Long memberId = member.getId();
+        wishService.deleteMemberWishByProductId(productId, memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
