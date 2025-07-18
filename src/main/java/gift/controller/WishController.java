@@ -3,6 +3,7 @@ package gift.controller;
 import gift.annotation.LoginMember;
 import gift.dto.CreateWishRequestDto;
 import gift.dto.UpdateWishQuantityRequstDto;
+import gift.dto.WishPageDto;
 import gift.dto.WishResponseDto;
 import gift.entity.Member;
 import gift.service.WishService;
@@ -43,11 +44,11 @@ public class WishController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<WishResponseDto>> findMemberWishes(
+    public ResponseEntity<WishPageDto> findMemberWishes(
             @LoginMember Member member,
             @PageableDefault(size = 5, direction = Direction.ASC) Pageable pageable) {
         Long memberId = member.getId();
-        Page<WishResponseDto> wishes = wishService.findMemberWishes(memberId, pageable);
+        WishPageDto wishes = wishService.findMemberWishes(memberId, pageable);
         return new ResponseEntity<>(wishes, HttpStatus.OK);
     }
 

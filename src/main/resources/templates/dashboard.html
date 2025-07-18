@@ -57,7 +57,7 @@
   </thead>
 
   <tbody>
-  <tr th:each="product : ${products.content}">
+  <tr th:each="product : ${products.contents()}">
     <td><span th:text="${product.id}"></span></td>
     <td><span th:text="${product.name}"></span></td>
     <td><span th:text="${product.price}"></span></td>
@@ -75,7 +75,7 @@
 </table>
 
 <nav>
-  <ul th:with="pageNum=${products.getNumber()}, totalPageNum=${products.getTotalPages()}, start=${pageNum >= 2 ? pageNum - 2 : 0}, end=${totalPageNum > pageNum + 2 ? pageNum + 2 : totalPageNum - 1}">
+  <ul th:with="pageNum=${products.pageNum()}, totalPageNum=${products.totalPageNum()}, start=${pageNum >= 2 ? pageNum - 2 : 0}, end=${totalPageNum > pageNum + 2 ? pageNum + 2 : totalPageNum - 1}">
     <li>
       <a th:href="@{/admin/boards(page=0)}" th:text="'<<'"></a>
     </li>

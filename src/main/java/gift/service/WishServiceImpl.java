@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.CreateWishRequestDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.WishPageDto;
 import gift.dto.WishResponseDto;
 import gift.entity.Member;
 import gift.entity.Product;
@@ -61,9 +62,13 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
-    public Page<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable) {
+    public WishPageDto findMemberWishes(Long memberId, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findAllByMember_Id(memberId, pageable);
-        return toResponseDtoPage(wishes);
+        Page<WishResponseDto> responseDtos = toResponseDtoPage(wishes);
+        List<WishResponseDto> contents = responseDtos.getContent();
+        int pageNum = responseDtos.getNumber();
+        int totalPageNum = responseDtos.getTotalPages();
+        return new WishPageDto(contents, pageNum, totalPageNum);
     }
 
     @Override

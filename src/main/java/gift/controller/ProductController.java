@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.annotation.LoginMember;
 import gift.dto.CreateProductRequestDto;
+import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
 import gift.entity.Member;
 import gift.exception.CustomException;
@@ -48,9 +49,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDto>> findAllProducts(
+    public ResponseEntity<ProductPageDto> findAllProducts(
             @PageableDefault(size = 5, sort = "name", direction = Direction.ASC) Pageable pageable) {
-        Page<ProductResponseDto> products = productService.findAllProducts(pageable);
+        ProductPageDto products = productService.findAllProducts(pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

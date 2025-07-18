@@ -1,6 +1,7 @@
 package gift.service;
 
 import gift.dto.CreateWishRequestDto;
+import gift.dto.WishPageDto;
 import gift.dto.WishResponseDto;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface WishService {
 
     WishResponseDto createWish(CreateWishRequestDto requestDto, Long memberId);
 
-    Page<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable);
+    WishPageDto findMemberWishes(Long memberId, Pageable pageable);
 
     WishResponseDto updateMemberWishQuantityByProductId(Long quantity, Long productId,
             Long memberId);
