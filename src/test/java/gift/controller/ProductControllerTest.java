@@ -6,7 +6,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import gift.dto.CreateMemberRequestDto;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.DeleteMemberRequestDto;
+import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.WishPageDto;
 import gift.entity.Product;
 import gift.service.MemberService;
 import gift.service.ProductService;
@@ -30,7 +32,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.Random.class)
 public class ProductControllerTest {
 
     String token;
@@ -42,20 +44,17 @@ public class ProductControllerTest {
     @Autowired
     private MemberService memberService;
 
-    @Order(1)
     @Test
     @DisplayName("상품 전체 조회 테스트")
     void 전체_조회하면_200이_반환된다() {
         String url = "http://localhost:" + port + "/api/products";
-        ResponseEntity<List<ProductResponseDto>> response = client.get()
+        ResponseEntity<ProductPageDto> response = client.get()
                 .uri(url)
                 .retrieve()
-                .toEntity(new ParameterizedTypeReference<List<ProductResponseDto>>() {
-                });
+                .toEntity(ProductPageDto.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @Order(2)
     @Test
     @DisplayName("상품 개별 조회 테스트")
     void 존재하는_아이디로_개별조회하면_200이_반환된다() {
@@ -67,7 +66,6 @@ public class ProductControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @Order(3)
     @Test
     @DisplayName("없는 상품 개별 조회 실패 테스트")
     void 존재하지_않는_아이디로_개별조회하면_404가_반환된다() {
@@ -81,7 +79,6 @@ public class ProductControllerTest {
                 );
     }
 
-    @Order(4)
     @Test
     @DisplayName("상품 등록 성공 테스트")
     void 상품등록에_성공하면_201가_반환된다() {
@@ -96,7 +93,6 @@ public class ProductControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    @Order(5)
     @Test
     @DisplayName("입력 값 검증으로 인한 상품 등록 실패 테스트")
     void 상품등록에_실패하면_400가_반환된다() {
@@ -114,7 +110,6 @@ public class ProductControllerTest {
                 );
     }
 
-    @Order(6)
     @Test
     @DisplayName("입력 값 검증으로 인한 상품 수정 실패 테스트")
     void 상품수정에_실패하면_400가_반환된다() {
@@ -132,7 +127,6 @@ public class ProductControllerTest {
                 );
     }
 
-    @Order(7)
     @Test
     @DisplayName("없는 상품 수정 실패 테스트")
     void 없는_상품을_수정하면_404가_반환된다() {
@@ -149,7 +143,6 @@ public class ProductControllerTest {
                 );
     }
 
-    @Order(8)
     @Test
     @DisplayName("상품 수정 성공 테스트")
     void 상품을_정상적으로_수정하면_200가_반환된다() {
@@ -164,7 +157,6 @@ public class ProductControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @Order(9)
     @Test
     @DisplayName("상품 삭제 성공 테스트")
     void 상품을_정상적으로_삭제하면_204가_반환된다() {
@@ -177,7 +169,6 @@ public class ProductControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
-    @Order(10)
     @Test
     @DisplayName("없는 상품 삭제 실패 테스트")
     void 상품을_삭제_실패하면_404가_반환된다() {
