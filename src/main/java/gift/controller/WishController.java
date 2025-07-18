@@ -8,6 +8,7 @@ import gift.entity.Member;
 import gift.service.WishService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -44,8 +45,9 @@ public class WishController {
     public ResponseEntity<List<WishResponseDto>> findMemberWishes(
             @LoginMember Member member,
             @PageableDefault(size = 5, direction = Direction.ASC) Pageable pageable) {
-        return new ResponseEntity<>(
-                wishService.findMemberWishes(member.getId(), pageable), HttpStatus.OK);
+        Page<WishResponseDto> wishPage = wishService.findMemberWishes(member.getId(), pageable);
+        List<WishResponseDto> wishes = wishPage.getContent();
+        return new ResponseEntity<>(wishes, HttpStatus.OK);
     }
 
     @PatchMapping("/{productId}")

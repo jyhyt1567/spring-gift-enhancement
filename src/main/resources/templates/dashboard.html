@@ -33,6 +33,13 @@
     tr:nth-child(even) {
       background-color: lightgray;
     }
+
+    ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
   </style>
 </head>
 <body>
@@ -66,5 +73,17 @@
   </tr>
   </tbody>
 </table>
+
+<nav>
+  <ul th:with="start=${pageNum >= 2 ? pageNum - 2 : 0}, end=${totalPageNum > pageNum + 2 ? pageNum + 2 : totalPageNum - 1}">
+    <li>
+      <a th:href="@{/admin/boards(page=0)}" th:text="'<<'"></a>
+    </li>
+    <li th:each="num : ${#numbers.sequence(start, end)}">
+      <a th:href="@{/admin/boards(page=${num})}" th:text="${num+1}"></a>
+    </li>
+    <a th:href="@{/admin/boards(page=${totalPageNum - 1})}" th:text="'>>'"></a>
+  </ul>
+</nav>
 </body>
 </html>
