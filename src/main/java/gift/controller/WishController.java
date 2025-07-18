@@ -45,7 +45,7 @@ public class WishController {
             @LoginMember Member member,
             @PageableDefault(size = 5, direction = Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(
-                wishService.findMemberWishes(member.getId(), pageable).getContent(), HttpStatus.OK);
+                wishService.findMemberWishes(member.getId(), pageable), HttpStatus.OK);
     }
 
     @PatchMapping("/{productId}")

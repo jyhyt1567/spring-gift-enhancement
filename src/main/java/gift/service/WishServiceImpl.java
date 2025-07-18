@@ -61,9 +61,9 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
-    public Page<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable) {
+    public List<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable) {
         Page<Wish> wishes = wishRepository.findAllByMember_Id(memberId, pageable);
-        return toResponseDtoPage(wishes);
+        return toResponseDtoPage(wishes).getContent();
     }
 
     @Override

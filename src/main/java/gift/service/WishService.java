@@ -11,7 +11,7 @@ public interface WishService {
 
     WishResponseDto createWish(CreateWishRequestDto requestDto, Long memberId);
 
-    Page<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable);
+    List<WishResponseDto> findMemberWishes(Long memberId, Pageable pageable);
 
     WishResponseDto updateMemberWishQuantityByProductId(Long quantity, Long productId,
             Long memberId);

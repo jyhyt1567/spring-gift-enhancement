@@ -12,7 +12,7 @@ public interface ProductService {
 
     ProductResponseDto createProduct(CreateProductRequestDto requestDto);
 
-    Page<ProductResponseDto> findAllProducts(Pageable pageable);
+    List<ProductResponseDto> findAllProducts(Pageable pageable);
 
     ProductResponseDto findProductById(Long id);
 
