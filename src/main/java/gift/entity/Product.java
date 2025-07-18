@@ -60,15 +60,15 @@ public class Product {
         return imageUrl;
     }
 
-    public void setName(String name) {
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public void setPrice(Long price) {
+    public void changePrice(Long price) {
         this.price = price;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void changeImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

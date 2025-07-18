@@ -64,7 +64,7 @@ public class Wish {
         return quantity;
     }
 
-    public void setQuantity(Long quantity) {
+    public void changeQuantity(Long quantity) {
         this.quantity = quantity;
     }
 }

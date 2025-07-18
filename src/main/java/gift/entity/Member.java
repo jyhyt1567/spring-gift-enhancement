@@ -56,7 +56,7 @@ public class Member {
         return role;
     }
 
-    public void setPassword(String password) {
+    public void changePassword(String password) {
         this.password = password;
     }
 

@@ -52,10 +52,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto) {
-        Product find = findProductByIdOrElseThrow(id);
-        find.setName(requestDto.name());
-        find.setPrice(requestDto.price());
-        find.setImageUrl(requestDto.imageUrl());
+        Product product = findProductByIdOrElseThrow(id);
+        product.changeName(requestDto.name());
+        product.changePrice(requestDto.price());
+        product.changeImageUrl(requestDto.imageUrl());
         Product updated = findProductByIdOrElseThrow(id);
         return new ProductResponseDto(updated.getId(), updated.getName(), updated.getPrice(),
                 updated.getImageUrl());

@@ -45,9 +45,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void updateMemberPassword(UpdateMemberPasswordRequestDto requestDto) {
-        Member find = findMemberByEmailOrElseThrow(requestDto.email());
-        throwIfPasswordIncorrect(find, requestDto.oldPassword());
-        find.setPassword(requestDto.newPassword());
+        Member member = findMemberByEmailOrElseThrow(requestDto.email());
+        throwIfPasswordIncorrect(member, requestDto.oldPassword());
+        member.changePassword(requestDto.newPassword());
     }
 
     @Override
