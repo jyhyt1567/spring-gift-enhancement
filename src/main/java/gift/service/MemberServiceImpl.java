@@ -9,6 +9,7 @@ import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -33,30 +34,29 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public JWTResponseDto loginMember(CreateMemberRequestDto requestDto) {
-        Member find = findMemberByEmailOrElseThrow(requestDto.email());
+        Member member = findMemberByEmailOrElseThrow(requestDto.email());
 
-        throwIfPasswordIncorrect(find, requestDto.password());
+        throwIfPasswordIncorrect(member, requestDto.password());
 
-        String accessToken = tokenService.createAccessToken(find);
+        String accessToken = tokenService.createAccessToken(member);
         return new JWTResponseDto(accessToken);
     }
 
     @Override
+    @Transactional
     public void updateMemberPassword(UpdateMemberPasswordRequestDto requestDto) {
-        Member find = findMemberByEmailOrElseThrow(requestDto.email());
-
-        throwIfPasswordIncorrect(find, requestDto.oldPassword());
-        Member updated = new Member(find.getId(), find.getEmail(), requestDto.newPassword(), find.getRole());
-        memberRepository.save(updated);
+        Member member = findMemberByEmailOrElseThrow(requestDto.email());
+        throwIfPasswordIncorrect(member, requestDto.oldPassword());
+        member.changePassword(requestDto.newPassword());
     }
 
     @Override
     public void deleteMember(DeleteMemberRequestDto requestDto) {
-        Member find = findMemberByEmailOrElseThrow(requestDto.email());
+        Member member = findMemberByEmailOrElseThrow(requestDto.email());
 
-        throwIfPasswordIncorrect(find, requestDto.password());
+        throwIfPasswordIncorrect(member, requestDto.password());
 
-        memberRepository.deleteById(find.getId());
+        memberRepository.deleteById(member.getId());
     }
 
     private Member findMemberByEmailOrElseThrow(String email) {

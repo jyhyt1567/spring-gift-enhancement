@@ -25,19 +25,19 @@ public class Member {
     @Column(name = "role", nullable = false)
     private String role;
 
-    public Member(Long id, String email, String password, String role) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+    protected Member() {
+
     }
 
     public Member(String email, String password, String role) {
         this(null, email, password, role);
     }
 
-    protected Member() {
-
+    public Member(Long id, String email, String password, String role) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -54,6 +54,10 @@ public class Member {
 
     public String getRole() {
         return role;
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
     }
 
     public Boolean isAdmin() {

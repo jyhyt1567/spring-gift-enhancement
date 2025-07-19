@@ -1,14 +1,17 @@
 package gift.service;
 
 import gift.dto.CreateProductRequestDto;
+import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
 import gift.entity.Product;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.repository.ProductRepository;
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,32 +35,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> findAllProducts() {
-
-        List<Product> products = productRepository.findAll();
-        List<ProductResponseDto> productsList = new ArrayList<>();
-        for (Product product : products) {
-            ProductResponseDto responseDto = new ProductResponseDto(product.getId(),
-                    product.getName(), product.getPrice(), product.getImageUrl());
-            productsList.add(responseDto);
-        }
-        return productsList;
+    public ProductPageDto findAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        Page<ProductResponseDto> responseDtos = toResponseDtoPage(products);
+        return new ProductPageDto(responseDtos);
     }
 
     @Override
     public ProductResponseDto findProductById(Long id) {
-        Product find = findProductByIdOrElseThrow(id);
+        Product product = findProductByIdOrElseThrow(id);
 
-        return new ProductResponseDto(find.getId(), find.getName(),
-                find.getPrice(), find.getImageUrl());
+        return new ProductResponseDto(product.getId(), product.getName(),
+                product.getPrice(), product.getImageUrl());
     }
 
     @Override
+    @Transactional
     public ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto) {
-        findProductByIdOrElseThrow(id);
-        Product newProduct = new Product(id, requestDto.name(), requestDto.price(),
-                requestDto.imageUrl());
-        productRepository.save(newProduct);
+        Product product = findProductByIdOrElseThrow(id);
+        product.changeName(requestDto.name());
+        product.changePrice(requestDto.price());
+        product.changeImageUrl(requestDto.imageUrl());
         Product updated = findProductByIdOrElseThrow(id);
         return new ProductResponseDto(updated.getId(), updated.getName(), updated.getPrice(),
                 updated.getImageUrl());
@@ -72,5 +70,13 @@ public class ProductServiceImpl implements ProductService {
     private Product findProductByIdOrElseThrow(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
+    }
+
+    private Page<ProductResponseDto> toResponseDtoPage(Page<Product> page) {
+        return page.map(product -> new ProductResponseDto(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImageUrl()));
     }
 }

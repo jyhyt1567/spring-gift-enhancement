@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.annotation.LoginMember;
 import gift.dto.CreateProductRequestDto;
+import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
 import gift.entity.Member;
 import gift.exception.CustomException;
@@ -11,6 +12,10 @@ import gift.service.TokenService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,8 +49,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> findAllProducts() {
-        return new ResponseEntity<>(productService.findAllProducts(), HttpStatus.OK);
+    public ResponseEntity<ProductPageDto> findAllProducts(
+            @PageableDefault(size = 5, sort = "name", direction = Direction.ASC) Pageable pageable) {
+        ProductPageDto products = productService.findAllProducts(pageable);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

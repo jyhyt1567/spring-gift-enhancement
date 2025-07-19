@@ -6,7 +6,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import gift.dto.CreateMemberRequestDto;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.DeleteMemberRequestDto;
+import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.WishPageDto;
 import gift.entity.Product;
 import gift.service.MemberService;
 import gift.service.ProductService;
@@ -15,7 +17,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -27,6 +32,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.Random.class)
 public class ProductControllerTest {
 
     String token;
@@ -42,18 +48,17 @@ public class ProductControllerTest {
     @DisplayName("상품 전체 조회 테스트")
     void 전체_조회하면_200이_반환된다() {
         String url = "http://localhost:" + port + "/api/products";
-        ResponseEntity<List<ProductResponseDto>> response = client.get()
+        ResponseEntity<ProductPageDto> response = client.get()
                 .uri(url)
                 .retrieve()
-                .toEntity(new ParameterizedTypeReference<List<ProductResponseDto>>() {
-                });
+                .toEntity(ProductPageDto.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     @DisplayName("상품 개별 조회 테스트")
     void 존재하는_아이디로_개별조회하면_200이_반환된다() {
-        String url = "http://localhost:" + port + "/api/products/1";
+        String url = "http://localhost:" + port + "/api/products/3";
         ResponseEntity<ProductResponseDto> response = client.get()
                 .uri(url)
                 .retrieve()
@@ -155,12 +160,12 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품 삭제 성공 테스트")
     void 상품을_정상적으로_삭제하면_204가_반환된다() {
-        String url = "http://localhost:" + port + "/api/products/3";
-        ResponseEntity<ProductResponseDto> response = client.delete()
+        String url = "http://localhost:" + port + "/api/products/1";
+        ResponseEntity<Void> response = client.delete()
                 .uri(url)
                 .header("Authorization", token)
                 .retrieve()
-                .toEntity(ProductResponseDto.class);
+                .toBodilessEntity();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 

@@ -29,19 +29,19 @@ public class Product {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    public Product(Long id, String name, Long price, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    protected Product() {
+
     }
 
     public Product(String name, Long price, String imageUrl) {
         this(null, name, price, imageUrl);
     }
 
-    protected Product() {
-
+    public Product(Long id, String name, Long price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -58,5 +58,17 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changePrice(Long price) {
+        this.price = price;
+    }
+
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

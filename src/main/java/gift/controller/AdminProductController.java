@@ -1,30 +1,23 @@
 package gift.controller;
 
-import gift.dto.CreateMemberRequestDto;
 import gift.dto.CreateProductRequestDto;
-import gift.dto.ProductResponseDto;
-import gift.entity.Member;
+import gift.dto.ProductPageDto;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.service.MemberService;
 import gift.service.ProductService;
-import gift.service.TokenService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -44,8 +37,8 @@ public class AdminProductController {
     }
 
     @GetMapping
-    public String showAdminPage(Model model) {
-        List<ProductResponseDto> products = productService.findAllProducts();
+    public String showAdminPage(Model model, @PageableDefault(size = 5, sort = "name", direction = Direction.ASC) Pageable pageable) {
+        ProductPageDto products = productService.findAllProducts(pageable);
         model.addAttribute("products", products);
         return "dashboard";
     }
