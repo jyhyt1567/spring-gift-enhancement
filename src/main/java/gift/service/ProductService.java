@@ -1,8 +1,10 @@
 package gift.service;
 
 import gift.dto.CreateProductRequestDto;
+import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
@@ -16,4 +18,6 @@ public interface ProductService {
     ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto);
 
     void deleteProductById(Long id);
+
+    List<OptionResponseDto> findProductOptionById(Long id);
 }

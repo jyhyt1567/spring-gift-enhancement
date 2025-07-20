@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.annotation.LoginMember;
 import gift.dto.CreateProductRequestDto;
+import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
 import gift.entity.Member;
@@ -58,6 +59,11 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> findProductById(@PathVariable Long id) {
         return new ResponseEntity<>(productService.findProductById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/options")
+    public ResponseEntity<List<OptionResponseDto>> findProductOptionById(@PathVariable Long id) {
+        return new ResponseEntity<>(productService.findProductOptionById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

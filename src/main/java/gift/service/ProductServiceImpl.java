@@ -1,12 +1,15 @@
 package gift.service;
 
 import gift.dto.CreateProductRequestDto;
+import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.repository.ProductRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +70,13 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
+    @Override
+    public List<OptionResponseDto> findProductOptionById(Long id) {
+        Product product = findProductByIdOrElseThrow(id);
+        List<Option> options = product.getOptions();
+        return toOptionResponseDtoList(options);
+    }
+
     private Product findProductByIdOrElseThrow(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
@@ -78,5 +88,13 @@ public class ProductServiceImpl implements ProductService {
                 product.getName(),
                 product.getPrice(),
                 product.getImageUrl()));
+    }
+
+    private List<OptionResponseDto> toOptionResponseDtoList (List<Option> options) {
+        List<OptionResponseDto> optionResponseDtos = new ArrayList<>();
+        for(Option option : options){
+            optionResponseDtos.add(new OptionResponseDto(option.getName(), option.getQuantity()));
+        }
+        return optionResponseDtos;
     }
 }

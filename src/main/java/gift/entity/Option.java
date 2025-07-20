@@ -43,4 +43,20 @@ public class Option {
         this.quantity = quantity;
         this.product = product;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
 }
