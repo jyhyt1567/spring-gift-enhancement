@@ -1,6 +1,7 @@
 package gift.controller;
 
 import gift.annotation.LoginMember;
+import gift.dto.CreateOptionRequestDto;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
@@ -64,6 +65,13 @@ public class ProductController {
     @GetMapping("/{id}/options")
     public ResponseEntity<List<OptionResponseDto>> findProductOptionById(@PathVariable Long id) {
         return new ResponseEntity<>(productService.findProductOptionById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/options")
+    public ResponseEntity<OptionResponseDto> createOption(
+            @PathVariable Long id,
+            @Valid @RequestBody CreateOptionRequestDto requestDto) {
+        return new ResponseEntity<>(productService.createOption(requestDto, id), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

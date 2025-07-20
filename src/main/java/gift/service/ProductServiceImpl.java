@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.dto.CreateOptionRequestDto;
 import gift.dto.CreateProductRequestDto;
 import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
@@ -8,6 +9,7 @@ import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
+import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +23,11 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    private final OptionRepository optionRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository, OptionRepository optionRepository) {
         this.productRepository = productRepository;
+        this.optionRepository = optionRepository;
     }
 
     @Override
@@ -77,9 +82,25 @@ public class ProductServiceImpl implements ProductService {
         return toOptionResponseDtoList(options);
     }
 
+    @Override
+    public OptionResponseDto createOption(CreateOptionRequestDto requestDto, Long id) {
+        Product product = findProductByIdOrElseThrow(id);
+        checkDuplicateOption(id, requestDto.name());
+        Option newOption = new Option(requestDto.name(), requestDto.quantity(), product);
+        Option savedOption = optionRepository.save(newOption);
+        return new OptionResponseDto(savedOption.getName(), savedOption.getQuantity());
+    }
+
     private Product findProductByIdOrElseThrow(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
+    }
+
+    private void checkDuplicateOption(Long productId, String name) {
+        optionRepository.findByProduct_IdAndName(productId, name)
+                .ifPresent(option -> {
+                    throw new CustomException(ErrorCode.AlreadyExistOptionName);
+                });
     }
 
     private Page<ProductResponseDto> toResponseDtoPage(Page<Product> page) {
