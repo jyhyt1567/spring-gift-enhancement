@@ -11,7 +11,7 @@ public enum ErrorCode {
     AlreadyMadeWish(HttpStatus.FORBIDDEN, "이미 위시로 등록한 상품입니다"),
     NotLogin(HttpStatus.UNAUTHORIZED, "로그인 하지 않았습니다"),
     NotRegisterd(HttpStatus.NOT_FOUND, "해당 이메일은 가입하지 않았습니다"),
-    AlreadyExistOptionName(HttpStatus.BAD_REQUEST, "이미 해당 상품에 존재하는 옵션입니다"),
+    AlreadyExistOptionName(HttpStatus.BAD_REQUEST, "중복된 옵션은 추가할 수 없습니다"),
     NamingForbidden(HttpStatus.FORBIDDEN, "'카카오'가 포함된 문구는 담당 MD와 협의한 경우에만 사용할 수 있습니다");
 
     private final HttpStatus status;

@@ -31,13 +31,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponseDto createProduct(CreateProductRequestDto requestDto) {
-
         Product newProduct = new Product(requestDto.name(), requestDto.price(),
-                requestDto.imageUrl(), null); //todo
-
+                requestDto.imageUrl(), null);
         Product savedProduct = productRepository.save(newProduct);
-
+        for (CreateOptionRequestDto requestOptionDto : requestDto.options()){
+            this.createOption(requestOptionDto, savedProduct.getId());
+        }
         return new ProductResponseDto(savedProduct.getId(), savedProduct.getName(),
                 savedProduct.getPrice(), savedProduct.getImageUrl());
     }
