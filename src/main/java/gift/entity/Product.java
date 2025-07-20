@@ -29,19 +29,24 @@ public class Product {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @OneToMany(mappedBy = "product")
+    @Column(name = "options", nullable = false)
+    private List<Option> options;
+
     protected Product() {
 
     }
 
-    public Product(String name, Long price, String imageUrl) {
-        this(null, name, price, imageUrl);
+    public Product(String name, Long price, String imageUrl, List<Option> options) {
+        this(null, name, price, imageUrl, options);
     }
 
-    public Product(Long id, String name, Long price, String imageUrl) {
+    public Product(Long id, String name, Long price, String imageUrl, List<Option> options) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.options = options;
     }
 
     public Long getId() {
@@ -58,6 +63,10 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void changeName(String name) {

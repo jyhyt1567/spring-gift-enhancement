@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto createProduct(CreateProductRequestDto requestDto) {
 
         Product newProduct = new Product(requestDto.name(), requestDto.price(),
-                requestDto.imageUrl());
+                requestDto.imageUrl(), null); //todo
 
         Product savedProduct = productRepository.save(newProduct);
 
