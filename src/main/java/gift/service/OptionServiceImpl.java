@@ -38,7 +38,7 @@ public class OptionServiceImpl implements OptionService{
         Product product = productService.findProductByIdOrElseThrow(productId);
         newOption.setProduct(product);
         Option savedOption = optionRepository.save(newOption);
-        return new OptionResponseDto(savedOption.getName(), savedOption.getQuantity());
+        return new OptionResponseDto(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class OptionServiceImpl implements OptionService{
         Option option = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
         option.changeQuantity(requestDto.quantity());
         Option updatedOption = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
-        return new OptionResponseDto(updatedOption.getName(), updatedOption.getQuantity());
+        return new OptionResponseDto(updatedOption.getId(), updatedOption.getName(), updatedOption.getQuantity());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class OptionServiceImpl implements OptionService{
     private List<OptionResponseDto> toOptionResponseDtoList (List<Option> options) {
         List<OptionResponseDto> optionResponseDtos = new ArrayList<>();
         for(Option option : options){
-            optionResponseDtos.add(new OptionResponseDto(option.getName(), option.getQuantity()));
+            optionResponseDtos.add(new OptionResponseDto(option.getId(), option.getName(), option.getQuantity()));
         }
         return optionResponseDtos;
     }
