@@ -38,6 +38,10 @@ public class Product {
 
     }
 
+    public Product(String name, Long price, String imageUrl) {
+        this(null, name, price, imageUrl, new ArrayList<Option>());
+    }
+
     public Product(String name, Long price, String imageUrl, List<Option> options) {
         this(null, name, price, imageUrl, options);
     }
