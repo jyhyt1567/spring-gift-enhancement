@@ -9,6 +9,7 @@ import gift.dto.ProductResponseDto;
 import gift.entity.Member;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import gift.service.TokenService;
 import jakarta.validation.Valid;
@@ -36,8 +37,11 @@ public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    private final OptionService optionService;
+
+    public ProductController(ProductService productService, OptionService optionService) {
         this.productService = productService;
+        this.optionService = optionService;
     }
 
     @PostMapping
@@ -64,14 +68,14 @@ public class ProductController {
 
     @GetMapping("/{id}/options")
     public ResponseEntity<List<OptionResponseDto>> findProductOptionById(@PathVariable Long id) {
-        return new ResponseEntity<>(productService.findProductOptionById(id), HttpStatus.OK);
+        return new ResponseEntity<>(optionService.findProductOptionById(id), HttpStatus.OK);
     }
 
     @PostMapping("/{id}/options")
     public ResponseEntity<OptionResponseDto> createOption(
             @PathVariable Long id,
             @Valid @RequestBody CreateOptionRequestDto requestDto) {
-        return new ResponseEntity<>(productService.createOption(requestDto, id), HttpStatus.CREATED);
+        return new ResponseEntity<>(optionService.createOption(requestDto, id), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

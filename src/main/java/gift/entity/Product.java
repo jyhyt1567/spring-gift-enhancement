@@ -2,6 +2,7 @@ package gift.entity;
 
 import gift.dto.CreateProductRequestDto;
 import gift.dto.ProductResponseDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class Product {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     @Column(name = "options", nullable = false)
     private List<Option> options;
 
@@ -79,5 +80,9 @@ public class Product {
 
     public void changeImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void addOption(Option option){
+        options.add(option);
     }
 }

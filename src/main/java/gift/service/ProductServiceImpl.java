@@ -23,22 +23,21 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    private final OptionRepository optionRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository, OptionRepository optionRepository) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.optionRepository = optionRepository;
     }
 
     @Override
     @Transactional
     public ProductResponseDto createProduct(CreateProductRequestDto requestDto) {
+        List<Option> optionList = new ArrayList<>();
         Product newProduct = new Product(requestDto.name(), requestDto.price(),
-                requestDto.imageUrl(), null);
-        Product savedProduct = productRepository.save(newProduct);
+                requestDto.imageUrl(), optionList);
         for (CreateOptionRequestDto requestOptionDto : requestDto.options()){
-            this.createOption(requestOptionDto, savedProduct.getId());
+            Option option = new Option(requestOptionDto.name(), requestOptionDto.quantity(), newProduct);
+            newProduct.addOption(option);
         }
+        Product savedProduct = productRepository.save(newProduct);
         return new ProductResponseDto(savedProduct.getId(), savedProduct.getName(),
                 savedProduct.getPrice(), savedProduct.getImageUrl());
     }
@@ -77,31 +76,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<OptionResponseDto> findProductOptionById(Long id) {
-        Product product = findProductByIdOrElseThrow(id);
-        List<Option> options = product.getOptions();
-        return toOptionResponseDtoList(options);
-    }
-
-    @Override
-    public OptionResponseDto createOption(CreateOptionRequestDto requestDto, Long id) {
-        Product product = findProductByIdOrElseThrow(id);
-        checkDuplicateOption(id, requestDto.name());
-        Option newOption = new Option(requestDto.name(), requestDto.quantity(), product);
-        Option savedOption = optionRepository.save(newOption);
-        return new OptionResponseDto(savedOption.getName(), savedOption.getQuantity());
-    }
-
-    private Product findProductByIdOrElseThrow(Long id) {
+    public Product findProductByIdOrElseThrow(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.ProductNotfound));
-    }
-
-    private void checkDuplicateOption(Long productId, String name) {
-        optionRepository.findByProduct_IdAndName(productId, name)
-                .ifPresent(option -> {
-                    throw new CustomException(ErrorCode.AlreadyExistOptionName);
-                });
     }
 
     private Page<ProductResponseDto> toResponseDtoPage(Page<Product> page) {
@@ -110,13 +87,5 @@ public class ProductServiceImpl implements ProductService {
                 product.getName(),
                 product.getPrice(),
                 product.getImageUrl()));
-    }
-
-    private List<OptionResponseDto> toOptionResponseDtoList (List<Option> options) {
-        List<OptionResponseDto> optionResponseDtos = new ArrayList<>();
-        for(Option option : options){
-            optionResponseDtos.add(new OptionResponseDto(option.getName(), option.getQuantity()));
-        }
-        return optionResponseDtos;
     }
 }
