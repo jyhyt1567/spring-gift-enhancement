@@ -2,6 +2,9 @@ package gift.service;
 
 import gift.dto.CreateOptionRequestDto;
 import gift.dto.OptionResponseDto;
+import gift.dto.UpdateOptionQuantityRequestDto;
+import gift.entity.Option;
+import jakarta.validation.Valid;
 import java.util.List;
 
 public interface OptionService {
@@ -9,4 +12,13 @@ public interface OptionService {
     List<OptionResponseDto> findProductOptionById(Long id);
 
     OptionResponseDto createOption(CreateOptionRequestDto requestDto, Long id);
+
+    OptionResponseDto setOptionQuantity(
+            Long id,
+            Long optionId,
+            UpdateOptionQuantityRequestDto requestDto);
+
+    Void deleteOption(Long id, Long optionId);
+
+    Option findOptionByProductIdAndOptionIdOrElseThrow(Long productId, Long optionId);
 }

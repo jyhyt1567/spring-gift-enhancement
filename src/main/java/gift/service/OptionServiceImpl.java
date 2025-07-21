@@ -2,6 +2,7 @@ package gift.service;
 
 import gift.dto.CreateOptionRequestDto;
 import gift.dto.OptionResponseDto;
+import gift.dto.UpdateOptionQuantityRequestDto;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.CustomException;
@@ -10,6 +11,7 @@ import gift.repository.OptionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OptionServiceImpl implements OptionService{
@@ -37,6 +39,32 @@ public class OptionServiceImpl implements OptionService{
         newOption.setProduct(product);
         Option savedOption = optionRepository.save(newOption);
         return new OptionResponseDto(savedOption.getName(), savedOption.getQuantity());
+    }
+
+    @Override
+    @Transactional
+    public OptionResponseDto setOptionQuantity(
+            Long id,
+            Long optionId,
+            UpdateOptionQuantityRequestDto requestDto) {
+        Option option = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
+        option.changeQuantity(requestDto.quantity());
+        Option updatedOption = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
+        return new OptionResponseDto(updatedOption.getName(), updatedOption.getQuantity());
+    }
+
+    @Override
+    @Transactional
+    public Void deleteOption(Long id, Long optionId) {
+        findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
+        optionRepository.deleteById(optionId);
+        return null;
+    }
+
+    @Override
+    public Option findOptionByProductIdAndOptionIdOrElseThrow(Long productId, Long optionId) {
+        return optionRepository.findByProduct_IdAndId(productId, optionId)
+                .orElseThrow(() -> new CustomException(ErrorCode.OptionNotFound));
     }
 
     private void checkDuplicateOption(Long productId, String name) {

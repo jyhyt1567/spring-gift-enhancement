@@ -64,4 +64,8 @@ public class Option {
         this.product = product;
         product.addOption(this);
     }
+
+    public void changeQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
 }
