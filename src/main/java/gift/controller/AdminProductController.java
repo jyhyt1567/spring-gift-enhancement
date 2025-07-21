@@ -1,13 +1,16 @@
 package gift.controller;
 
 import gift.dto.CreateProductRequestDto;
+import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.UpdateProductRequestDto;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.service.MemberService;
+import gift.service.OptionService;
 import gift.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -29,12 +32,17 @@ public class AdminProductController {
 
     private final MemberService memberService;
 
+    private final OptionService optionService;
+
     private final String BOARD_PAGE = "/admin/boards";
 
-    public AdminProductController(ProductService productService,
-            MemberService memberService) {
+    public AdminProductController(
+            ProductService productService,
+            MemberService memberService,
+            OptionService optionService) {
         this.productService = productService;
         this.memberService = memberService;
+        this.optionService = optionService;
     }
 
     @GetMapping
@@ -55,6 +63,15 @@ public class AdminProductController {
             Model model) {
         model.addAttribute("id", id);
         return "updateForm";
+    }
+
+    @GetMapping("/{id}")
+    public String showOptionPage(
+            @PathVariable Long id,
+            Model model) {
+        List<OptionResponseDto> options = optionService.findProductOptionById(id);
+        model.addAttribute("options", options);
+        return "optionInfo";
     }
 
     @PostMapping
