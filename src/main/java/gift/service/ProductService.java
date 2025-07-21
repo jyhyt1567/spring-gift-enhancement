@@ -5,6 +5,7 @@ import gift.dto.CreateProductRequestDto;
 import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.UpdateProductRequestDto;
 import gift.entity.Product;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface ProductService {
 
     ProductResponseDto findProductById(Long id);
 
-    ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto);
+    ProductResponseDto updateProductById(Long id, UpdateProductRequestDto requestDto);
 
     void deleteProductById(Long id);
 

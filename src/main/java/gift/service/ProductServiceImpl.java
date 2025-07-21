@@ -5,6 +5,7 @@ import gift.dto.CreateProductRequestDto;
 import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.UpdateProductRequestDto;
 import gift.entity.Option;
 import gift.entity.Product;
 import gift.exception.CustomException;
@@ -59,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductResponseDto updateProductById(Long id, CreateProductRequestDto requestDto) {
+    public ProductResponseDto updateProductById(Long id, UpdateProductRequestDto requestDto) {
         Product product = findProductByIdOrElseThrow(id);
         product.changeName(requestDto.name());
         product.changePrice(requestDto.price());

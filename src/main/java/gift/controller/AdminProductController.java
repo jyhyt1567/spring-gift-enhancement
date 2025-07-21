@@ -2,6 +2,7 @@ package gift.controller;
 
 import gift.dto.CreateProductRequestDto;
 import gift.dto.ProductPageDto;
+import gift.dto.UpdateProductRequestDto;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
 import gift.service.MemberService;
@@ -68,7 +69,7 @@ public class AdminProductController {
 
     @PutMapping("/{id}")
     public String updateProduct(@PathVariable Long id,
-            @Valid @ModelAttribute CreateProductRequestDto requestDto) {
+            @Valid @ModelAttribute UpdateProductRequestDto requestDto) {
         if (requestDto.name().contains("카카오")) {
             throw new CustomException(ErrorCode.NamingForbidden);
         }

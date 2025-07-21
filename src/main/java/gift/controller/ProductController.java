@@ -6,6 +6,7 @@ import gift.dto.CreateProductRequestDto;
 import gift.dto.OptionResponseDto;
 import gift.dto.ProductPageDto;
 import gift.dto.ProductResponseDto;
+import gift.dto.UpdateProductRequestDto;
 import gift.entity.Member;
 import gift.exception.CustomException;
 import gift.exception.ErrorCode;
@@ -81,7 +82,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDto> updateProductById(
             @PathVariable Long id,
-            @Valid @RequestBody CreateProductRequestDto requestDto,
+            @Valid @RequestBody UpdateProductRequestDto requestDto,
             @LoginMember Member member) {
         if (requestDto.name().contains("카카오") && !member.isAdmin()) {
             throw new CustomException(ErrorCode.NamingForbidden);
