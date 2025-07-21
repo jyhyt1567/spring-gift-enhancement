@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public record CreateOptionRequestDto (
+public record CreateOptionRequestDto(
         @NotBlank(message = "옵션 명을 입력해주세요")
         @Size(max = 50, message = "최대 50자 까지 입력 가능합니다")
         @Pattern(regexp = "^[a-zA-Z0-9가-힣()\\[\\]+\\-&/_ ]*$",

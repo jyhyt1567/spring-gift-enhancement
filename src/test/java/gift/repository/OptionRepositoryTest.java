@@ -61,14 +61,15 @@ public class OptionRepositoryTest {
 
     @Test
     @DisplayName("상품 아이디, 옵션 아이디에 해당하는 옵션 삭제 테스트")
-    void deleteById(){
+    void deleteById() {
         productRepository.save(product);
         Option expected = new Option("3샷", 101L, product);
         Option actual = optionRepository.save(expected);
         Long optionId = actual.getId();
         optionRepository.deleteById(optionId);
 
-        Optional<Option> deleted = optionRepository.findByProduct_IdAndId(product.getId(), optionId);
+        Optional<Option> deleted = optionRepository.findByProduct_IdAndId(product.getId(),
+                optionId);
 
         assertAll(
                 () -> assertThat(deleted.isEmpty())

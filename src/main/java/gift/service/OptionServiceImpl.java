@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class OptionServiceImpl implements OptionService{
+public class OptionServiceImpl implements OptionService {
 
     private final OptionRepository optionRepository;
 
@@ -39,7 +39,8 @@ public class OptionServiceImpl implements OptionService{
         Product product = productService.findProductByIdOrElseThrow(productId);
         newOption.setProduct(product);
         Option savedOption = optionRepository.save(newOption);
-        return new OptionResponseDto(savedOption.getId(), savedOption.getName(), savedOption.getQuantity());
+        return new OptionResponseDto(savedOption.getId(), savedOption.getName(),
+                savedOption.getQuantity());
     }
 
     @Override
@@ -51,7 +52,8 @@ public class OptionServiceImpl implements OptionService{
         Option option = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
         option.changeQuantity(requestDto.quantity());
         Option updatedOption = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
-        return new OptionResponseDto(updatedOption.getId(), updatedOption.getName(), updatedOption.getQuantity());
+        return new OptionResponseDto(updatedOption.getId(), updatedOption.getName(),
+                updatedOption.getQuantity());
     }
 
     @Override
@@ -61,12 +63,13 @@ public class OptionServiceImpl implements OptionService{
             Long optionId,
             PurchaseOptionRequestDto requestDto) {
         Option option = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
-        if (requestDto.quantity() > option.getQuantity()){
+        if (requestDto.quantity() > option.getQuantity()) {
             throw new CustomException(ErrorCode.OptionNotEnough);
         }
         option.changeQuantity(option.getQuantity() - requestDto.quantity());
         Option updatedOption = findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
-        return new OptionResponseDto(updatedOption.getId(), updatedOption.getName(), updatedOption.getQuantity());
+        return new OptionResponseDto(updatedOption.getId(), updatedOption.getName(),
+                updatedOption.getQuantity());
     }
 
     @Override
@@ -90,17 +93,18 @@ public class OptionServiceImpl implements OptionService{
                 });
     }
 
-    private List<OptionResponseDto> toOptionResponseDtoList (List<Option> options) {
+    private List<OptionResponseDto> toOptionResponseDtoList(List<Option> options) {
         List<OptionResponseDto> optionResponseDtos = new ArrayList<>();
-        for(Option option : options){
-            optionResponseDtos.add(new OptionResponseDto(option.getId(), option.getName(), option.getQuantity()));
+        for (Option option : options) {
+            optionResponseDtos.add(
+                    new OptionResponseDto(option.getId(), option.getName(), option.getQuantity()));
         }
         return optionResponseDtos;
     }
 
     private List<Option> findOptionsByProductIdOrElseThrow(Long productId) {
-        List<Option> options =  optionRepository.findByProduct_Id(productId);
-        if (options.isEmpty()){
+        List<Option> options = optionRepository.findByProduct_Id(productId);
+        if (options.isEmpty()) {
             throw new CustomException(ErrorCode.ProductNotfound);
         }
         return options;

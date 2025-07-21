@@ -29,6 +29,7 @@ import org.springframework.boot.context.config.ConfigData.Options;
 
 @ExtendWith(MockitoExtension.class)
 public class OptionServiceTest {
+
     @Mock
     private OptionRepository optionRepository;
 
@@ -44,7 +45,7 @@ public class OptionServiceTest {
 
     @Test
     @DisplayName("옵션 이름 중복 시 실패 테스트")
-    void 옵션_이름_중복(){
+    void 옵션_이름_중복() {
         Long productId = 1L;
         CreateOptionRequestDto request = new CreateOptionRequestDto("옵션 1", 1L);
         List<Option> options = new ArrayList<>();
@@ -60,12 +61,12 @@ public class OptionServiceTest {
 
     @Test
     @DisplayName("현재 수량을 초과하는 수량을 구매 시도 시 실패 테스트")
-    void 현재_수량을_초과하는_수량을_구매할_수_없다(){
+    void 현재_수량을_초과하는_수량을_구매할_수_없다() {
         Long productId = 1L;
         CreateOptionRequestDto request = new CreateOptionRequestDto("옵션 1", 10L);
         List<Option> options = new ArrayList<>();
         Product product = new Product(1L, "상품 1", 123L, "asd", options);
-        Option option = new Option(1L,"옵션 1", 10L, product);
+        Option option = new Option(1L, "옵션 1", 10L, product);
         product.addOption(option);
 
         PurchaseOptionRequestDto requestDto = new PurchaseOptionRequestDto(11L);
