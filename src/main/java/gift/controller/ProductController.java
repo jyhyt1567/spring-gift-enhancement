@@ -90,7 +90,8 @@ public class ProductController {
     public ResponseEntity<Void> deleteOption(
             @PathVariable Long id,
             @PathVariable Long optionId) {
-        return new ResponseEntity<>(optionService.deleteOption(id,optionId), HttpStatus.NO_CONTENT);
+        optionService.deleteOption(id,optionId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
