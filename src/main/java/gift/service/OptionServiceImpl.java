@@ -11,6 +11,7 @@ import gift.exception.ErrorCode;
 import gift.repository.OptionRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,12 +94,11 @@ public class OptionServiceImpl implements OptionService {
     }
 
     private List<OptionResponseDto> toOptionResponseDtoList(List<Option> options) {
-        List<OptionResponseDto> optionResponseDtos = new ArrayList<>();
-        for (Option option : options) {
-            optionResponseDtos.add(
-                    new OptionResponseDto(option.getId(), option.getName(), option.getQuantity()));
-        }
-        return optionResponseDtos;
+        return options
+                .stream()
+                .map(option -> new OptionResponseDto(option.getId(), option.getName(),
+                        option.getQuantity()))
+                .collect(Collectors.toList());
     }
 
     private List<Option> findOptionsByProductIdOrElseThrow(Long productId) {
