@@ -80,8 +80,7 @@ public class OptionServiceImpl implements OptionService {
         return null;
     }
 
-    @Override
-    public Option findOptionByProductIdAndOptionIdOrElseThrow(Long productId, Long optionId) {
+    private Option findOptionByProductIdAndOptionIdOrElseThrow(Long productId, Long optionId) {
         return optionRepository.findByProduct_IdAndId(productId, optionId)
                 .orElseThrow(() -> new CustomException(ErrorCode.OptionNotFound));
     }

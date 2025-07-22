@@ -26,6 +26,4 @@ public interface OptionService {
             PurchaseOptionRequestDto requestDto);
 
     Void deleteOption(Long id, Long optionId);
-
-    Option findOptionByProductIdAndOptionIdOrElseThrow(Long productId, Long optionId);
 }
