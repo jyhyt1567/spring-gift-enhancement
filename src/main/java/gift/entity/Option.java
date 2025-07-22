@@ -12,7 +12,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "options")
+@Table(name = "product_options")
 public class Option {
 
     @Id
