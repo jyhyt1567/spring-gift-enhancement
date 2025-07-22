@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.context.config.ConfigData.Options;
@@ -36,12 +37,8 @@ public class OptionServiceTest {
     @Mock
     private ProductService productService;
 
-    private OptionService optionService;
-
-    @BeforeEach
-    void setup() {
-        optionService = new OptionServiceImpl(optionRepository, productService);
-    }
+    @InjectMocks
+    private OptionServiceImpl optionService;
 
     @Test
     @DisplayName("옵션 이름 중복 시 실패 테스트")
