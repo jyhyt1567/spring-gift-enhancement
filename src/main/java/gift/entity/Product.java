@@ -71,7 +71,7 @@ public class Product {
     }
 
     public List<Option> getOptions() {
-        return options;
+        return new ArrayList<>(options);
     }
 
     public void changeName(String name) {
