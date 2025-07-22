@@ -34,6 +34,7 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
+    @Transactional
     public OptionResponseDto createOption(CreateOptionRequestDto requestDto, Long productId) {
         checkDuplicateOption(productId, requestDto.name());
         Option newOption = new Option(requestDto.name(), requestDto.quantity(), null);
