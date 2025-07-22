@@ -171,7 +171,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품 삭제 성공 테스트")
     void 상품을_정상적으로_삭제하면_204가_반환된다() {
-        String url = "http://localhost:" + port + "/api/products/1";
+        String url = "http://localhost:" + port + "/api/products/2";
         ResponseEntity<Void> response = client.delete()
                 .uri(url)
                 .header("Authorization", token)
@@ -259,7 +259,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("옵션 삭제 성공 테스트")
     void 옵션을_정상적으로_삭제하면_204가_반환된다() {
-        String url = "http://localhost:" + port + "/api/products/2/options/1";
+        String url = "http://localhost:" + port + "/api/products/5/options/10";
         ResponseEntity<Void> response = client.delete()
                 .uri(url)
                 .header("Authorization", token)
@@ -271,7 +271,7 @@ public class ProductControllerTest {
     @Test
     @DisplayName("옵션 수정 성공 테스트")
     void 옵션을_정상적으로_수정하면_200가_반환된다() {
-        String url = "http://localhost:" + port + "/api/products/2/options/2";
+        String url = "http://localhost:" + port + "/api/products/1/options/3";
         UpdateOptionQuantityRequestDto requestDto = new UpdateOptionQuantityRequestDto(999L);
         ResponseEntity<Void> response = client.patch()
                 .uri(url)
