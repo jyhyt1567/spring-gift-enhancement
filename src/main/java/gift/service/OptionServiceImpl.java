@@ -75,10 +75,9 @@ public class OptionServiceImpl implements OptionService {
 
     @Override
     @Transactional
-    public Void deleteOption(Long id, Long optionId) {
+    public void deleteOption(Long id, Long optionId) {
         findOptionByProductIdAndOptionIdOrElseThrow(id, optionId);
         optionRepository.deleteById(optionId);
-        return null;
     }
 
     private Option findOptionByProductIdAndOptionIdOrElseThrow(Long productId, Long optionId) {

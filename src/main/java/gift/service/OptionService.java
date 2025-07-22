@@ -25,5 +25,5 @@ public interface OptionService {
             Long optionId,
             PurchaseOptionRequestDto requestDto);
 
-    Void deleteOption(Long id, Long optionId);
+    void deleteOption(Long id, Long optionId);
 }
